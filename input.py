@@ -4,7 +4,7 @@ import openpyxl as xlrd
 def line_2_arr(row):
     row_vals = []
     for cel in row:
-        row_vals.append(cel.value)
+        row_vals.append(str(cel.value).replace(" ", ""))
     return row_vals
 
 
@@ -22,7 +22,7 @@ def generate_data(row, keys, data_list, key):
         i += 1
     data_arr.append(sub)
 
-    data_key = str(data[key])
+    data_key = str(data.get(key))
     old_data = data_list.get(data_key)
     if old_data:
         old_list = old_data["list"]
@@ -48,6 +48,6 @@ def export_data(template_name, key):
             keys = line_2_arr(row)
         else:
             data = generate_data(row, keys, data_list, key)
-            data_list[str(data[key])] = data
+            data_list[str(data.get(key))] = data
         count += 1
     return data_list

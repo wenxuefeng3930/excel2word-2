@@ -1,18 +1,24 @@
 import openpyxl as xlrd
+import xpinyin
 
 
 def line_2_arr(row):
+    p = xpinyin.Pinyin()
     row_vals = []
     for cel in row:
-        row_vals.append(str(cel.value).replace(" ", ""))
+        cel_val = str(cel.value).replace(" ", "")
+        cel_val = p.get_pinyin(cel_val)
+        row_vals.append(cel_val)
     return row_vals
 
 
 def generate_data(row, keys, data_list, key):
+    p = xpinyin.Pinyin()
     data = {}
     data_arr = []
     sub = {}
     i = 0
+    key = p.get_pinyin(key)
     for cel in row:
         cur_key = keys[i]
         if cur_key == key:

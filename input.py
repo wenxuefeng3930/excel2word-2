@@ -1,3 +1,5 @@
+import datetime
+import time
 import openpyxl as xlrd
 import xpinyin
 
@@ -24,7 +26,10 @@ def generate_data(row, keys, data_list, key):
         if cur_key == key:
             data[key] = cel.value
         else:
-            sub[keys[i]] = cel.value
+            if type(cel.value) == datetime.datetime:
+                sub[keys[i]] = '{:%Y-%m-%d}'.format(cel.value)
+            else:
+                sub[keys[i]] = str(cel.value)
         i += 1
     data_arr.append(sub)
 

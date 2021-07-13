@@ -24,12 +24,12 @@ def generate_data(row, keys, data_list, key):
     for cel in row:
         cur_key = keys[i]
         if cur_key == key:
-            data[key] = cel.value
+            data[key] = str(cel.value)
         else:
             if type(cel.value) == datetime.datetime:
                 sub[keys[i]] = '{:%Y-%m-%d}'.format(cel.value)
             elif type(cel.value) == float:
-                sub[keys[i]] = ('%2f' % cel.value)
+                sub[keys[i]] = str(('%2f' % cel.value))
             else:
                 sub[keys[i]] = str(cel.value)
         i += 1

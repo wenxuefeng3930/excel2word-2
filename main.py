@@ -23,4 +23,3 @@ if __name__ == '__main__':
     for key in data_list:
         data = data_list.get(key)
         output.create_doc(path+file_prefix+"-"+str(key)+".docx", data, template, key)
-

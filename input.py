@@ -9,7 +9,7 @@ def line_2_arr(row):
     row_vals = []
     for cel in row:
         cel_val = str(cel.value).replace(" ", "")
-        cel_val = p.get_pinyin(cel_val)
+        cel_val = p.get_pinyin(cel_val, splitter="_").replace('(', '').replace(')', '').replace('（', '').replace('）', '').replace('.', '').replace('/', '')
         row_vals.append(cel_val)
     return row_vals
 
@@ -28,6 +28,8 @@ def generate_data(row, keys, data_list, key):
         else:
             if type(cel.value) == datetime.datetime:
                 sub[keys[i]] = '{:%Y-%m-%d}'.format(cel.value)
+            elif type(cel.value) == float:
+                sub[keys[i]] = ('%2f' % cel.value)
             else:
                 sub[keys[i]] = str(cel.value)
         i += 1
@@ -41,13 +43,13 @@ def generate_data(row, keys, data_list, key):
             pass
         for old_sub in old_list:
             data_arr.append(old_sub)
-
+    print(keys)
     data["list"] = data_arr
     return data
 
 
 def export_data(template_name, key):
-    wd = xlrd.load_workbook("./input/"+template_name)
+    wd = xlrd.load_workbook("./input/" + template_name, data_only=True)
     sheets = wd.worksheets
     sheet = sheets[0]
     rows = sheet.rows

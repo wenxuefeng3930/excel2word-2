@@ -1,5 +1,4 @@
 import datetime
-import time
 import openpyxl as xlrd
 import xpinyin
 
@@ -29,7 +28,8 @@ def generate_data(row, keys, data_list, key):
             if type(cel.value) == datetime.datetime:
                 sub[keys[i]] = '{:%Y-%m-%d}'.format(cel.value)
             elif type(cel.value) == float:
-                sub[keys[i]] = str(('%2f' % cel.value))
+                sub[keys[i]] = format(cel.value, ",.2f")
+                # str(('%2f' % cel.value))
             else:
                 sub[keys[i]] = str(cel.value)
         i += 1
@@ -43,13 +43,12 @@ def generate_data(row, keys, data_list, key):
             pass
         for old_sub in old_list:
             data_arr.append(old_sub)
-    print(keys)
     data["list"] = data_arr
     return data
 
 
-def export_data(template_name, key):
-    wd = xlrd.load_workbook("./input/" + template_name, data_only=True)
+def export_data(template_name, key, in_path):
+    wd = xlrd.load_workbook(in_path + template_name, data_only=True)
     sheets = wd.worksheets
     sheet = sheets[0]
     rows = sheet.rows

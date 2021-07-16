@@ -1,6 +1,9 @@
 import docxtpl as doc
 import mailmerge
+from operator import attrgetter, itemgetter
+from locale import *
 
+setlocale(LC_NUMERIC, 'English_US')
 
 def is_number(s):
     try:
@@ -20,14 +23,15 @@ def is_number(s):
 
 
 def create_doc(filename, data, template, key):
+    filename = filename.replace(" ", "_")
+    print("正在生成文件：[" + filename + "]")
     document = mailmerge.MailMerge(template)
-    # document.merge('A/CNO.账户号码'=data.get('A/CNO.账户号码'))
     data_list = data.get("list")
     total = 0
     for data in data_list:
-        if data.get("TOTAL_an_ke_hu_") is not None and is_number(data.get("TOTAL_an_ke_hu_")):
-            total += float(data.get("TOTAL_an_ke_hu_"))
-
+        if data.get("TOTAL_an_ke_hu_") is not None and is_number(atof(data.get("TOTAL_an_ke_hu_"))):
+            total += atof(data.get("TOTAL_an_ke_hu_"))
+    data_list = sorted(data_list, key=itemgetter('jiao_yi_kai_fang_ri'), reverse=False)
     document.merge_rows("ji_jin_ming_cheng", data_list)
     obj = data_list[0]
     document.merge(ACNO_zhang_hu_hao_ma=key,
@@ -40,9 +44,5 @@ def create_doc(filename, data, template, key):
                    TOTAL_an_ke_hu_=str(total),
                    )
 
-    # print(obj)
-    # document.merge(obj)
     document.write(filename)
-    # tpl = doc.DocxTemplate(template)
-    # tpl.render(obj)
-    # tpl.save(filename)
+    print("生成文件：[" + filename + "]完成")

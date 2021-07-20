@@ -1,6 +1,8 @@
 import datetime
-import openpyxl as xlrd
+import openpyxl as openpyxl
 import xpinyin
+from xlrd import xldate_as_tuple
+from datetime import datetime
 
 
 def line_2_arr(row):
@@ -25,7 +27,10 @@ def generate_data(row, keys, data_list, key):
         if cur_key == key:
             data[key] = str(cel.value)
         else:
-            if type(cel.value) == datetime.datetime:
+            if keys[i] in {"jie_dan_ri_qi"} and cel.value is not None and type(cel.value) != datetime:
+                date = datetime(*xldate_as_tuple(cel.value, 0))
+                sub[keys[i]] = date.strftime('%Y-%m-%d')
+            elif type(cel.value) == datetime:
                 sub[keys[i]] = '{:%Y-%m-%d}'.format(cel.value)
             elif type(cel.value) == float:
                 sub[keys[i]] = format(cel.value, ",.2f")
@@ -48,7 +53,7 @@ def generate_data(row, keys, data_list, key):
 
 
 def export_data(template_name, key, in_path):
-    wd = xlrd.load_workbook(in_path + template_name, data_only=True)
+    wd = openpyxl.load_workbook(in_path + template_name, data_only=True)
     sheets = wd.worksheets
     sheet = sheets[0]
     rows = sheet.rows
@@ -60,6 +65,8 @@ def export_data(template_name, key, in_path):
             keys = line_2_arr(row)
         else:
             data = generate_data(row, keys, data_list, key)
+            if data.get(key) is None or data.get(key) == 'None':
+                break
             data_list[str(data.get(key))] = data
         count += 1
     return data_list

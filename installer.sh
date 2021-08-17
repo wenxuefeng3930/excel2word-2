@@ -1,0 +1,1 @@
+pyinstaller ./main.py ./input.py ./output.py ./mailmerge.py

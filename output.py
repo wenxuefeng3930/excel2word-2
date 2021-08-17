@@ -5,6 +5,7 @@ from locale import setlocale, atof, LC_NUMERIC
 
 setlocale(LC_NUMERIC, 'English_US')
 
+
 def is_number(s):
     try:
         float(s)
@@ -32,6 +33,20 @@ def create_doc(filename, data, template, key, type):
         for data in data_list:
             if data.get("TOTAL_an_ke_hu_") is not None and is_number(atof(data.get("TOTAL_an_ke_hu_"))):
                 total += atof(data.get("TOTAL_an_ke_hu_"))
+            if data.get("cun_xu_fen_e") is not None and is_number(atof(data.get("cun_xu_fen_e"))):
+                data["cun_xu_fen_e"] = format(atof(data.get("cun_xu_fen_e")), ",.4f")
+            if data.get("qi_mo_dan_wei_jing_zhi") is not None and is_number(atof(data.get("qi_mo_dan_wei_jing_zhi"))):
+                data["qi_mo_dan_wei_jing_zhi"] = format(atof(data.get("qi_mo_dan_wei_jing_zhi")), ",.4f")
+            if data.get("qi_mo_zi_chan_jing_zhi") is not None and is_number(atof(data.get("qi_mo_zi_chan_jing_zhi"))):
+                data["qi_mo_zi_chan_jing_zhi"] = format(atof(data.get("qi_mo_zi_chan_jing_zhi")), ",.2f")
+            if data.get("jun_heng_bu_chang") is not None and is_number(atof(data.get("jun_heng_bu_chang"))):
+                data["jun_heng_bu_chang"] = format(atof(data.get("jun_heng_bu_chang")), ",.2f")
+            if data.get("qi_mo_dan_wei_jing_zhi__han_EQ") is not None and \
+                    is_number(atof(data.get("qi_mo_dan_wei_jing_zhi__han_EQ"))):
+                data["qi_mo_dan_wei_jing_zhi__han_EQ"] = format(atof(data.get("qi_mo_dan_wei_jing_zhi__han_EQ")), ",.4f")
+            if data.get("qi_mo_zi_chan_jing_zhi_afterEQ") is not None and \
+                    is_number(atof(data.get("qi_mo_zi_chan_jing_zhi_afterEQ"))):
+                data["qi_mo_zi_chan_jing_zhi_afterEQ"] = format(atof(data.get("qi_mo_zi_chan_jing_zhi_afterEQ")), ",.2f")
         data_list = sorted(data_list, key=itemgetter('jiao_yi_kai_fang_ri'), reverse=False)
         document.merge_rows("ji_jin_ming_cheng", data_list)
         obj = data_list[0]

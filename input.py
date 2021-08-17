@@ -31,9 +31,9 @@ def generate_data(row, keys, data_list, key):
                 date = datetime(*xldate_as_tuple(cel.value, 0))
                 sub[keys[i]] = date.strftime('%Y-%m-%d')
             elif type(cel.value) == datetime:
-                sub[keys[i]] = '{:%Y-%m-%d}'.format(cel.value)
+                sub[keys[i]] = '{:%Y年%m月%d日}'.format(cel.value)
             elif type(cel.value) == float:
-                sub[keys[i]] = format(cel.value, ",.2f")
+                sub[keys[i]] = format(cel.value, ",.4f")
                 # str(('%2f' % cel.value))
             else:
                 sub[keys[i]] = str(cel.value)
